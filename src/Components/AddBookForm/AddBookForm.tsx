@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import cn from 'classnames';
+import { Navigate } from 'react-router-dom';
 import { InputField } from '../InputField/InputField';
 import { addBook } from '../../api/api';
 import { addedBook } from '../../api/Types/Book';
@@ -8,10 +10,17 @@ export const AddBookForm: React.FC = () => {
   const [authorName, setAuthorName] = useState('');
   const [category, setCategory] = useState('Politics');
   const [ISBN, setISBN] = useState('');
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [wasAdded, setWasAdded] = useState(false);
 
-  const isHasEmptyFields = title.length === 0 && authorName.length === 0 && ISBN.length === 0;
+  const isHasEmptyFields
+    = title.length === 0
+    && authorName.length === 0
+    && ISBN.length === 0;
 
   const addBookHandler = () => {
+    setIsLoading(true);
     const newBook: addedBook = {
       title,
       authorName,
@@ -20,12 +29,28 @@ export const AddBookForm: React.FC = () => {
     };
 
     if (!isHasEmptyFields) {
-      addBook(newBook).finally();
+      addBook(newBook)
+        .then(() => {
+          setWasAdded(true);
+          setIsError(false);
+          setTitle('');
+          setAuthorName('');
+          setCategory('Politics');
+          setISBN('');
+        })
+        .catch(() => setIsError(true))
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   };
 
   return (
     <>
+      {isError
+        && <p className="help is-danger">Something went wrong! Try again!</p>}
+      {wasAdded
+        && (<Navigate to="/" replace />)}
       <form onSubmit={(event) => {
         event.preventDefault();
       }}
@@ -76,7 +101,7 @@ export const AddBookForm: React.FC = () => {
         <p className="control">
           <button
             type="button"
-            className="button is-primary"
+            className={cn('button is-primary', { 'is-loading': isLoading })}
             disabled={isHasEmptyFields}
             onClick={addBookHandler}
           >
@@ -84,8 +109,17 @@ export const AddBookForm: React.FC = () => {
           </button>
         </p>
         <p className="control">
-          <button type="button" className="button is-light">
-            Cancel
+          <button
+            type="button"
+            className="button is-light"
+            onClick={() => {
+              setTitle('');
+              setAuthorName('');
+              setCategory('Politics');
+              setISBN('');
+            }}
+          >
+            Clear form
           </button>
         </p>
       </div>

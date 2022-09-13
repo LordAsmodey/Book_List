@@ -4,11 +4,13 @@ const BASE_URL = 'http://localhost:3000/books';
 
 export function getBooks(): Promise<Book[]> {
   return fetch(`${BASE_URL}`)
-    .then(res => res.json())
-    .catch(() => ({
-      Response: 'False',
-      Error: 'unexpected error',
-    }));
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      throw new Error('Something went wrong');
+    });
 }
 
 export function editBook(book: Book): Promise<Book> {
@@ -19,11 +21,13 @@ export function editBook(book: Book): Promise<Book> {
     },
     body: JSON.stringify(book),
   })
-    .then(res => res.json())
-    .catch(() => ({
-      Response: 'False',
-      Error: 'unexpected error',
-    }));
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      throw new Error('Something went wrong');
+    });
 }
 
 export function addBook(book: addedBook): Promise<Book> {
@@ -34,9 +38,24 @@ export function addBook(book: addedBook): Promise<Book> {
     },
     body: JSON.stringify(book),
   })
-    .then(res => res.json())
-    .catch(() => ({
-      Response: 'False',
-      Error: 'unexpected error',
-    }));
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      throw new Error('Something went wrong');
+    });
+}
+
+export function deleteBook(id: number): Promise<Book> {
+  return fetch(`${BASE_URL}/${id}`, {
+    method: 'DELETE',
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      throw new Error('Something went wrong');
+    });
 }

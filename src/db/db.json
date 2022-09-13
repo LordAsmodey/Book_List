@@ -8,18 +8,25 @@
       "ISBN": "9780758700162"
     },
     {
-      "title": "Hehehehe",
-      "authorName": "fwefsdfsfdsfs",
-      "category": "Autobiography",
-      "ISBN": "97gfgdg001",
+      "title": "Clean Code",
+      "authorName": "Robert C. Martin",
+      "category": "Politics",
+      "ISBN": "123456789",
       "id": 1
     },
     {
-      "title": "New Book",
-      "authorName": "Unkmown",
-      "category": "Politics",
-      "ISBN": "123456789",
+      "title": "Clean Architecture",
+      "authorName": "Robert C. Martin",
+      "category": "Autobiography",
+      "ISBN": "123456789123",
       "id": 2
+    },
+    {
+      "title": "Grokking Algorithms",
+      "authorName": "Aditya Y. Bhargava",
+      "category": "Romance",
+      "ISBN": "987654321852",
+      "id": 3
     }
   ]
 }

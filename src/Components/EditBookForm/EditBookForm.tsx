@@ -17,6 +17,8 @@ export const EditBookForm: React.FC<Props> = (props) => {
   } = props;
 
   const [isHasEmptyFields, setIsHasEmptyFields] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const emptyFieldsHandler = (field: string) => {
     if (field.trim().length === 0) {
@@ -27,16 +29,21 @@ export const EditBookForm: React.FC<Props> = (props) => {
   };
 
   const formSubmitHandler = () => {
+    setIsLoading(true);
     if (book && !isHasEmptyFields) {
-      editBook(book).then((res) => {
-        setBooks((prev: Book[]) => (
-          [...prev.filter(item => item.id !== res.id),
-            res,
-          ]
-        ));
-      })
-        .finally(() => {
+      editBook(book)
+        .then((res) => {
+          setIsError(false);
           setEditedBook(null);
+          setBooks((prev: Book[]) => (
+            [...prev.filter(item => item.id !== res.id),
+              res,
+            ]
+          ));
+        })
+        .catch(() => setIsError(true))
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   };
@@ -56,6 +63,13 @@ export const EditBookForm: React.FC<Props> = (props) => {
           </button>
         </header>
         <section className="modal-card-body">
+          {isError && (
+            <p
+              className="help is-danger"
+            >
+              Something went wrong! Try again!
+            </p>
+          )}
           <form onSubmit={(event) => {
             event.preventDefault();
             formSubmitHandler();
@@ -66,7 +80,8 @@ export const EditBookForm: React.FC<Props> = (props) => {
               <input
                 id="book-title"
                 type="text"
-                className={cn('input', { 'is-danger': book?.title.length === 0 })}
+                className={cn('input',
+                  { 'is-danger': book?.title.length === 0 })}
                 placeholder="Enter book title"
                 value={book?.title || ''}
                 onChange={(event) => {
@@ -78,14 +93,16 @@ export const EditBookForm: React.FC<Props> = (props) => {
                 }}
                 required
               />
-              {!book?.title.length && (<p className="help is-danger">Please enter book title!</p>)}
+              {!book?.title.length
+                && (<p className="help is-danger">Please enter book title!</p>)}
             </label>
             <label htmlFor="author-name">
               Enter author name:
               <input
                 id="author-name"
                 type="text"
-                className={cn('input', { 'is-danger': book?.authorName.length === 0 })}
+                className={cn('input',
+                  { 'is-danger': book?.authorName.length === 0 })}
                 placeholder="Enter author name"
                 value={book?.authorName || ''}
                 onChange={(event) => {
@@ -97,36 +114,46 @@ export const EditBookForm: React.FC<Props> = (props) => {
                 }}
                 required
               />
-              {!book?.authorName.length && (<p className="help is-danger">Please enter author name!</p>)}
+              {!book?.authorName.length
+                && (
+                  <p
+                    className="help is-danger"
+                  >
+                    Please enter author name!
+                  </p>
+                )}
             </label>
             <div className="field">
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label className="label">Select category</label>
-              <div className="control">
-                <div className="select">
-                  <select
-                    value={book?.category}
-                    onChange={(event) => {
-                      setEditedBook((prev: Book) => ({
-                        ...prev,
-                        category: event.target.value,
-                      }));
-                    }}
-                  >
-                    <option>Politics</option>
-                    <option>Fantasy</option>
-                    <option>Autobiography</option>
-                    <option>Romance</option>
-                  </select>
+              <label htmlFor="category" className="label">
+                Select category
+                <div className="control">
+                  <div className="select">
+                    <select
+                      id="category"
+                      value={book?.category}
+                      onChange={(event) => {
+                        setEditedBook((prev: Book) => ({
+                          ...prev,
+                          category: event.target.value,
+                        }));
+                      }}
+                    >
+                      <option>Politics</option>
+                      <option>Fantasy</option>
+                      <option>Autobiography</option>
+                      <option>Romance</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
+              </label>
             </div>
             <label htmlFor="ISBN">
               Enter ISBN:
               <input
                 id="ISBN"
                 type="text"
-                className={cn('input', { 'is-danger': book?.ISBN.length === 0 })}
+                className={cn('input',
+                  { 'is-danger': book?.ISBN.length === 0 })}
                 placeholder="Enter ISBN"
                 value={book?.ISBN || ''}
                 onChange={(event) => {
@@ -138,14 +165,15 @@ export const EditBookForm: React.FC<Props> = (props) => {
                 }}
                 required
               />
-              {!book?.ISBN.length && (<p className="help is-danger">Please enter book ISBN!</p>)}
+              {!book?.ISBN.length
+                && (<p className="help is-danger">Please enter book ISBN!</p>)}
             </label>
           </form>
         </section>
         <footer className="modal-card-foot">
           <button
             type="button"
-            className="button is-success"
+            className={cn('button is-success', { 'is-loading': isLoading })}
             onClick={formSubmitHandler}
             disabled={isHasEmptyFields}
           >

@@ -1,33 +1,66 @@
 import React, { useEffect, useState } from 'react';
-import { getBooks } from '../../api/api';
+import cn from 'classnames';
+import { deleteBook, getBooks } from '../../api/api';
 import { Book } from '../../api/Types/Book';
 import { EditBookForm } from '../EditBookForm/EditBookForm';
 import { Loader } from '../Loader/Loader';
 
 export const Dashboard: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [editedBook, setEditedBook] = useState<Book | null>(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getBooks()
-      .then(res => setBooks(res))
-      .finally(() => setLoading(false));
+      .then(res => {
+        setBooks(res);
+        setIsError(false);
+      })
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
   }, []);
+
+  const deleteBookHandler = (id: number) => {
+    setIsDeleteLoading(true);
+    deleteBook(id)
+      .then(() => {
+        setIsError(false);
+        setBooks((prevState) => (
+          [
+            ...prevState.filter(book => book.id !== id),
+          ]
+        ));
+      })
+      .catch(() => setIsError(true))
+      .finally(() => setIsDeleteLoading(false));
+  };
 
   return (
     <div>
-      <h1>Dashboard</h1>
-      {loading && <Loader />}
-      {!loading && (
+      {isLoading && <Loader />}
+      {!isLoading && isError && (
+        <p className="help is-danger">Something went wrong.</p>
+      )}
+      {!isLoading && books.length === 0 && !isError && (
+        <p
+          className="help is-info"
+        >
+          The list of books is empty! Add something to the list of books.
+        </p>
+      )}
+      {!isLoading && books.length > 0 && (
         <table className="table is-hoverable is-fullwidth">
           <thead>
             <tr>
               <th>Book title</th>
               <th>Author name</th>
               <th>Category</th>
-              <th><abbr title="International Standard Book Number">ISBN</abbr></th>
+              <th>
+                <abbr title="International Standard Book Number">ISBN</abbr>
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -36,7 +69,9 @@ export const Dashboard: React.FC = () => {
               <th>Book title</th>
               <th>Author name</th>
               <th>Category</th>
-              <th><abbr title="International Standard Book Number">ISBN</abbr></th>
+              <th>
+                <abbr title="International Standard Book Number">ISBN</abbr>
+              </th>
               <th>Actions</th>
             </tr>
           </tfoot>
@@ -51,15 +86,18 @@ export const Dashboard: React.FC = () => {
                 <td>{book.ISBN}</td>
                 <td>
                   <button
-                    className="button mr-1"
+                    className="button mr-1 is-info is-light"
                     onClick={() => setEditedBook(book)}
                     type="button"
                   >
                     Edit
                   </button>
                   <button
-                    className="button"
-                    onClick={() => {}}
+                    className={cn('button is-danger is-light',
+                      { 'is-loading': isDeleteLoading })}
+                    onClick={() => {
+                      deleteBookHandler(book.id);
+                    }}
                     type="button"
                   >
                     Delete
