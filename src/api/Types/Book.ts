@@ -3,6 +3,6 @@ export type Book =
     'id': number,
     'title': string,
     'authorName': string,
-    'Category': string,
+    'category': string,
     'ISBN': string
   };

@@ -4,8 +4,15 @@
       "id": 0,
       "title": "Harry Potter and the Philosopher's Stone",
       "authorName": "J. K. Rowling",
-      "Category": "Fantasy",
+      "category": "Fantasy",
       "ISBN": "9780758700162"
+    },
+    {
+      "title": "ERERER 77774",
+      "authorName": "888sfsdfgdsa",
+      "category": "Dramasda",
+      "ISBN": "97gfgdg00163212sdad",
+      "id": 1
     }
   ]
 }

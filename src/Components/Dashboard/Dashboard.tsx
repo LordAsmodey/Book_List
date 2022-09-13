@@ -47,7 +47,7 @@ export const Dashboard: React.FC = () => {
                 <td>
                   {book.authorName}
                 </td>
-                <td>{book.Category}</td>
+                <td>{book.category}</td>
                 <td>{book.ISBN}</td>
                 <td>
                   <button
@@ -70,7 +70,11 @@ export const Dashboard: React.FC = () => {
           </tbody>
         </table>
       )}
-      <EditBookForm editedBook={editedBook} />
+      <EditBookForm
+        setBooks={setBooks}
+        editedBook={editedBook}
+        setEditedBook={setEditedBook}
+      />
     </div>
   );
 };
