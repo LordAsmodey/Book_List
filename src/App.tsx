@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.scss';
-import { Routes, Route, Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from 'react-router-dom';
 import cn from 'classnames';
 import { Dashboard } from './Components/Dashboard/Dashboard';
 import { AddBookForm } from './Components/AddBookForm/AddBookForm';
 import { PageNotFound } from './Components/PageNotFound/PageNotFound';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('Dashboard');
+  const location = useLocation();
 
   return (
     <div className="app">
       <div className="tabs">
         <ul>
-          <li className={cn({ 'is-active': activeTab === 'Dashboard' })}>
+          <li className={cn({ 'is-active': location.pathname === '/' })}>
             <Link
               to="/"
-              onClick={() => setActiveTab('Dashboard')}
             >
               Dashboard
             </Link>
           </li>
-          <li className={cn({ 'is-active': activeTab === 'AddBook' })}>
+          <li className={cn({ 'is-active': location.pathname === '/add' })}>
             <Link
               to="add"
-              onClick={() => setActiveTab('AddBook')}
             >
               Add new book
             </Link>

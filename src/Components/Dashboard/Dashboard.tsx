@@ -28,7 +28,7 @@ export const Dashboard: React.FC = () => {
               <th>Author name</th>
               <th>Category</th>
               <th><abbr title="International Standard Book Number">ISBN</abbr></th>
-              <th><abbr title="Edit or Delete book">Actions</abbr></th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tfoot>
@@ -37,7 +37,7 @@ export const Dashboard: React.FC = () => {
               <th>Author name</th>
               <th>Category</th>
               <th><abbr title="International Standard Book Number">ISBN</abbr></th>
-              <th><abbr title="Edit or Delete book">Actions</abbr></th>
+              <th>Actions</th>
             </tr>
           </tfoot>
           <tbody>

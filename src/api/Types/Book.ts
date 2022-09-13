@@ -6,3 +6,5 @@ export type Book =
     'category': string,
     'ISBN': string
   };
+
+export type addedBook = Omit<Book, 'id'>;
