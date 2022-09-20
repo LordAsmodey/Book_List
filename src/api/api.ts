@@ -1,6 +1,6 @@
 import { addedBook, Book } from './Types/Book';
 
-const BASE_URL = 'http://localhost:3000/books';
+const BASE_URL = 'http://localhost:4000/books';
 
 export function getBooks(): Promise<Book[]> {
   return fetch(`${BASE_URL}`)

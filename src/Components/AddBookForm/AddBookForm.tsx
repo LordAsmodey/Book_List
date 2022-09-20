@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
 import { Navigate } from 'react-router-dom';
 import { InputField } from '../InputField/InputField';
@@ -14,10 +14,16 @@ export const AddBookForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [wasAdded, setWasAdded] = useState(false);
 
-  const isHasEmptyFields
-    = title.length === 0
-    && authorName.length === 0
-    && ISBN.length === 0;
+  const isHasEmptyFields = useMemo(() => {
+    return title.length === 0 && title.length === 0 && ISBN.length === 0;
+  }, [title, authorName, ISBN]);
+
+  const clearForm = () => {
+    setTitle('');
+    setAuthorName('');
+    setCategory('Politics');
+    setISBN('');
+  };
 
   const addBookHandler = () => {
     setIsLoading(true);
@@ -33,10 +39,7 @@ export const AddBookForm: React.FC = () => {
         .then(() => {
           setWasAdded(true);
           setIsError(false);
-          setTitle('');
-          setAuthorName('');
-          setCategory('Politics');
-          setISBN('');
+          clearForm();
         })
         .catch(() => setIsError(true))
         .finally(() => {
@@ -47,10 +50,12 @@ export const AddBookForm: React.FC = () => {
 
   return (
     <>
-      {isError
-        && <p className="help is-danger">Something went wrong! Try again!</p>}
-      {wasAdded
-        && (<Navigate to="/" replace />)}
+      {isError && (
+        <p className="help is-danger">Something went wrong! Try again!</p>
+      )}
+      {wasAdded && (
+        <Navigate to="/" replace />
+      )}
       <form onSubmit={(event) => {
         event.preventDefault();
       }}
@@ -112,12 +117,7 @@ export const AddBookForm: React.FC = () => {
           <button
             type="button"
             className="button is-light"
-            onClick={() => {
-              setTitle('');
-              setAuthorName('');
-              setCategory('Politics');
-              setISBN('');
-            }}
+            onClick={() => clearForm()}
           >
             Clear form
           </button>

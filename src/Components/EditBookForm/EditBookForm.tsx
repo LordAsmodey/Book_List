@@ -64,9 +64,7 @@ export const EditBookForm: React.FC<Props> = (props) => {
         </header>
         <section className="modal-card-body">
           {isError && (
-            <p
-              className="help is-danger"
-            >
+            <p className="help is-danger">
               Something went wrong! Try again!
             </p>
           )}
@@ -93,8 +91,9 @@ export const EditBookForm: React.FC<Props> = (props) => {
                 }}
                 required
               />
-              {!book?.title.length
-                && (<p className="help is-danger">Please enter book title!</p>)}
+              {!book?.title.length && (
+                <p className="help is-danger">Please enter book title!</p>
+              )}
             </label>
             <label htmlFor="author-name">
               Enter author name:
@@ -114,14 +113,9 @@ export const EditBookForm: React.FC<Props> = (props) => {
                 }}
                 required
               />
-              {!book?.authorName.length
-                && (
-                  <p
-                    className="help is-danger"
-                  >
-                    Please enter author name!
-                  </p>
-                )}
+              {!book?.authorName.length && (
+                <p className="help is-danger">Please enter author name!</p>
+              )}
             </label>
             <div className="field">
               <label htmlFor="category" className="label">
@@ -165,8 +159,9 @@ export const EditBookForm: React.FC<Props> = (props) => {
                 }}
                 required
               />
-              {!book?.ISBN.length
-                && (<p className="help is-danger">Please enter book ISBN!</p>)}
+              {!book?.ISBN.length && (
+                <p className="help is-danger">Please enter book ISBN!</p>
+              )}
             </label>
           </form>
         </section>
