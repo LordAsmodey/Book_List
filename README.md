@@ -9,3 +9,5 @@ Using [REST API](https://github.com/typicode/json-server)
 4. Run ``` npm run db-start``` to start fake database server
 5. Run ```npm start``` to start React app
 6. Enjoy :) 
+
+[DEMO](https://lordasmodey.github.io/Book_List/#/)
